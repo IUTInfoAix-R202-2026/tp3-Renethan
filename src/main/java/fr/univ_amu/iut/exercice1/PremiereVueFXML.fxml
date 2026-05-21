@@ -31,14 +31,14 @@
   </padding>
 
   <top>
-    <Label text="Bienvenue dans le monde FXML !"  style="-fx-font-size: 20px; -fx-font-weight: bold;"></Label>
+    <Label text="Bienvenue dans le monde FXML !"  style="-fx-font-size: 20px; -fx-font-weight: bold;"  BorderPane.alignment="CENTER"></Label>
   </top>
 
   <center>
-    <Label text="Ceci est un label explicatif"  wrapText="true"  alignment="CENTER"></Label>
+    <Label text="Ceci est un label explicatif"  wrapText="true"  BorderPane.alignment="CENTER"></Label>
   </center>
 
   <bottom>
-    <Button text="D'accord, c'est magique"  alignment="CENTER"></Button>
+    <Button text="D'accord, c'est magique"  BorderPane.alignment="CENTER"></Button>
   </bottom>
 </BorderPane>
