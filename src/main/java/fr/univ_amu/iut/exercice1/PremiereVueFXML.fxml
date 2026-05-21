@@ -26,5 +26,19 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
             prefWidth="420.0" prefHeight="240.0">
+  <padding>
+    <Insets top="20" left ="20" right="20" bottom="20"></Insets>
+  </padding>
 
+  <top>
+    <Label text="Bienvenue dans le monde FXML !"  style="-fx-font-size: 20px; -fx-font-weight: bold;"></Label>
+  </top>
+
+  <center>
+    <Label text="Ceci est un label explicatif"  wrapText="true"  alignment="CENTER"></Label>
+  </center>
+
+  <bottom>
+    <Button text="D'accord, c'est magique"  alignment="CENTER"></Button>
+  </bottom>
 </BorderPane>
