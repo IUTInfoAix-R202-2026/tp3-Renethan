@@ -51,8 +51,32 @@ public class FormulaireConnexionController {
    */
   @FXML
   private void initialize() {
-    // TODO exercice 3 : installer les bindings de validation.
-    //
+    champMotDePasse
+        .editableProperty()
+        .bind(Bindings.greaterThanOrEqual(champIdentifiant.textProperty().length(), 6));
+
+    boutonAnnuler
+        .disableProperty()
+        .bind(
+            Bindings.and(
+                Bindings.equal(0, champIdentifiant.textProperty().length()),
+                Bindings.equal(0, champMotDePasse.textProperty().length())));
+
+    BooleanBinding motDePasseInvalide =
+        new BooleanBinding() {
+          {
+            super.bind(champMotDePasse.textProperty());
+          }
+
+          @Override
+          protected boolean computeValue() {
+            return Bindings.lessThan(champMotDePasse.textProperty().length(), 8).getValue()
+                || champMotDePasse.getText().chars().noneMatch(Character::isUpperCase)
+                || champMotDePasse.getText().chars().noneMatch(Character::isDigit);
+          }
+        };
+
+    boutonOk.disableProperty().bind(motDePasseInvalide);
     // 1. Le mot de passe n'est éditable que si l'identifiant contient au moins 6 caractères :
     //      champMotDePasse.editableProperty().bind(
     //          Bindings.greaterThanOrEqual(champIdentifiant.textProperty().length(), 6));
@@ -77,7 +101,8 @@ public class FormulaireConnexionController {
    */
   @FXML
   private void valider() {
-    // TODO exercice 3 : afficher dans labelMessage l'identifiant suivi du mot
+    labelMessage.setText(
+        champIdentifiant.getText() + " " + "*".repeat(champMotDePasse.getText().length()));
     // de passe masqué par autant d'étoiles que de caractères saisis.
     // Exemple : "alice ********" pour identifiant "alice" et mot de passe de 8 caractères.
   }
@@ -85,6 +110,8 @@ public class FormulaireConnexionController {
   /** Action du bouton Annuler. Vide les deux champs et le label de message. */
   @FXML
   private void annuler() {
-    // TODO exercice 3 : vider les deux champs et le label message.
+    labelMessage.setText("");
+    champIdentifiant.setText("");
+    champMotDePasse.setText("");
   }
 }
