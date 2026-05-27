@@ -1,9 +1,11 @@
 package fr.univ_amu.iut.exercice5;
 
+import java.io.IOException;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -71,8 +73,15 @@ public class SiteCarte extends HBox {
    * racine et de contrôleur).
    */
   public SiteCarte() {
-    // TODO exercice 5 : assembler le FXMLLoader pour le pattern fx:root.
-    //
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("SiteCarte.fxml"));
+    loader.setRoot(this);
+    loader.setController(this);
+    try {
+      loader.load();
+    } catch (IOException e) {
+      throw new RuntimeException("Erreur dans le constructeur SiteCarte (IOException)");
+    }
+
     // 1. Construire un FXMLLoader avec getClass().getResource("SiteCarte.fxml").
     // 2. Lui dire que la racine du FXML doit être CET objet : loader.setRoot(this).
     // 3. Lui dire que le contrôleur doit être CET objet aussi : loader.setController(this).
@@ -87,8 +96,14 @@ public class SiteCarte extends HBox {
    */
   @FXML
   private void initialize() {
-    // TODO exercice 5 : lier chaque label à sa propriété et installer l'écouteur du badge.
-    //
+    labelCarre.textProperty().bind(numeroCarre);
+    labelNom.textProperty().bind(nomConvivial);
+    labelNbPoints.textProperty().bind(nombrePoints.asString().concat(" points d'écoute"));
+    labelNbPassages.textProperty().bind(nombrePassages.asString().concat(" passages"));
+
+    ChangeListener<Number> listener = (obs, oldValue, newValue) -> majBadge(newValue.intValue());
+    joursDepuisDernierPassage.addListener(listener);
+    majBadge(joursDepuisDernierPassage.get());
     // 1. labelCarre.textProperty().bind(numeroCarre) -- le numéro brut, sans préfixe.
     // 2. labelNom.textProperty().bind(nomConvivial).
     // 3. labelNbPoints.textProperty().bind(nombrePoints.asString().concat(" points d'écoute")).
@@ -103,8 +118,20 @@ public class SiteCarte extends HBox {
    * dernier passage. La valeur {@code -1} est traitée comme "aucun passage jamais importé".
    */
   private void majBadge(int jours) {
-    // TODO exercice 5 : implémenter la logique du badge de fraîcheur.
-    //
+    labelBadge.getStyleClass().removeAll("badge-fresh", "badge-stale", "badge-cold");
+    if (jours < 0) {
+      labelBadge.setText("Jamais utilisé");
+      labelBadge.getStyleClass().add("badge-cold");
+    } else if (jours < 7) {
+      labelBadge.setText("Il y a " + jours + "j");
+      labelBadge.getStyleClass().add("badge-fresh");
+    } else if (jours <= 30) {
+      labelBadge.setText("Il y a " + jours + "j");
+      labelBadge.getStyleClass().add("badge-stale");
+    } else {
+      labelBadge.setText("Il y a " + jours + "j");
+      labelBadge.getStyleClass().add("badge-cold");
+    }
     // - retirer d'abord les trois classes badge-fresh, badge-stale, badge-cold du labelBadge
     //   (labelBadge.getStyleClass().removeAll("badge-fresh", "badge-stale", "badge-cold"))
     // - si jours < 0 :  texte "Jamais utilisé", classe "badge-cold"
